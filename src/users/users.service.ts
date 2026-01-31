@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import {UserDocument} from "./models/user.schema";
 import {UsersRepository} from "./users.repository";
 import {CreateUserDto} from "./dto/create-user.dto";
-import {GetUsersFilterDto} from "./dto/get-users-filter.dto";
 
 @Injectable()
 export class UsersService {
@@ -12,7 +11,11 @@ export class UsersService {
         return this.usersRepository.create(createUserDto);
     }
 
-    async findAll(query: GetUsersFilterDto) {
+    async findAll() {
         return this.usersRepository.find({});
+    }
+
+    async findOne(_id: string) {
+        return this.usersRepository.findOne({ _id });
     }
 }

@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import {Injectable, NotFoundException} from "@nestjs/common";
 import { UserDocument } from './models/user.schema';
 import { InjectModel } from "@nestjs/mongoose";
 import { QueryFilter, Model, Types } from 'mongoose';
@@ -22,5 +22,15 @@ export class UsersRepository {
 
     async find(filterQuery: QueryFilter<UserDocument>) {
         return this.userModel.find(filterQuery).lean<UserDocument>(true);
+    }
+
+    async findOne(filterQuery: QueryFilter<UserDocument>): Promise<UserDocument> {
+        const userDocument = await this.userModel.findOne(filterQuery).lean<UserDocument>(true);
+
+        if (!userDocument) {
+            throw new NotFoundException('User was not found');
+        }
+
+        return userDocument;
     }
 }
