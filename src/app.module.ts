@@ -13,7 +13,8 @@ import {ConfigModule, ConfigService} from "@nestjs/config";
         uri: configService.get('MONGODB_URI'),
       }),
       inject: [ConfigService],
-    })],
+    }),
+    UsersModule],
   controllers: [AppController],
   providers: [AppService],
 })
