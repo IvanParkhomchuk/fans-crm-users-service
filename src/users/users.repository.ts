@@ -1,8 +1,8 @@
 import { Injectable } from "@nestjs/common";
 import { UserDocument } from './models/user.schema';
 import { InjectModel } from "@nestjs/mongoose";
-import {Model, Types} from 'mongoose';
-import {CreateUserDto} from "./dto/create-user.dto";
+import { QueryFilter, Model, Types } from 'mongoose';
+import { CreateUserDto } from "./dto/create-user.dto";
 
 @Injectable()
 export class UsersRepository {
@@ -18,5 +18,9 @@ export class UsersRepository {
         });
 
         return (await user.save()).toJSON as unknown as UserDocument;
+    }
+
+    async find(filterQuery: QueryFilter<UserDocument>) {
+        return this.userModel.find(filterQuery).lean<UserDocument>(true);
     }
 }

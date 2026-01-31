@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import {UserDocument} from "./models/user.schema";
 import {UsersRepository} from "./users.repository";
 import {CreateUserDto} from "./dto/create-user.dto";
+import {GetUsersFilterDto} from "./dto/get-users-filter.dto";
 
 @Injectable()
 export class UsersService {
@@ -9,5 +10,9 @@ export class UsersService {
 
     async create(createUserDto: CreateUserDto): Promise<UserDocument> {
         return this.usersRepository.create(createUserDto);
+    }
+
+    async findAll(query: GetUsersFilterDto) {
+        return this.usersRepository.find({});
     }
 }

@@ -1,7 +1,7 @@
-import {Body, Controller, Get, Post} from '@nestjs/common';
-import {UsersService} from "./users.service";
-import {UserDocument} from "./models/user.schema";
-import {CreateUserDto} from "./dto/create-user.dto";
+import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import { UsersService } from "./users.service";
+import { CreateUserDto } from "./dto/create-user.dto";
+import { GetUsersFilterDto } from "./dto/get-users-filter.dto";
 
 @Controller('users')
 export class UsersController {
@@ -12,5 +12,10 @@ export class UsersController {
         @Body() createUserDto: CreateUserDto,
     ) {
         return this.usersService.create(createUserDto);
+    }
+
+    @Get()
+    async findAll(@Query() query: GetUsersFilterDto) {
+        return this.usersService.findAll(query);
     }
 }
