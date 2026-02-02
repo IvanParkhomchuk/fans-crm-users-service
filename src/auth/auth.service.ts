@@ -1,7 +1,5 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { AuthCredentialsDto } from "./dto/auth-credentials.dto";
+import { Injectable } from '@nestjs/common';
 import { JwtService } from "@nestjs/jwt";
-import { UsersRepository } from "../users/users.repository";
 import { UserDocument } from "../users/models/user.schema";
 import { TokenPayload } from "./interfaces/token-payload.interface";
 import { ConfigService } from "@nestjs/config";
@@ -17,12 +15,6 @@ export class AuthService {
         const tokenPayload: TokenPayload = {
             userId: user._id.toHexString(),
         };
-
-        const expires = new Date();
-
-        expires.setSeconds(
-            expires.getSeconds() + this.configService.get('JWT_EXPIRATION'),
-        );
 
         const accessToken = this.jwtService.sign(tokenPayload);
 

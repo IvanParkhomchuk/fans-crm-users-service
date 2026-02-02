@@ -8,6 +8,7 @@ export class UsersController {
     constructor(private readonly usersService: UsersService) {}
 
     @Post()
+    // @TODO: Add Guard?
     async createUser(
         @Body() createUserDto: CreateUserDto,
     ) {
@@ -21,6 +22,7 @@ export class UsersController {
     }
 
     @Get(':id')
+    @UseGuards(JwtAuthGuard)
     async findOne(@Param('id') id: string) {
         return this.usersService.findOne(id);
     }
