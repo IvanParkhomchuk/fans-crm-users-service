@@ -6,13 +6,13 @@ export class UserDocument {
     @Prop({ type: SchemaTypes.ObjectId })
     _id: Types.ObjectId;
 
-    @Prop()
+    @Prop({ required: true })
     name: string;
 
-    @Prop()
+    @Prop({ required: true, unique: true })
     email: string;
 
-    @Prop()
+    @Prop({ required: true})
     password: string;
 
     @Prop()
@@ -20,3 +20,4 @@ export class UserDocument {
 }
 
 export const UserSchema = SchemaFactory.createForClass(UserDocument);
+UserSchema.index({ email: 1 }, { unique: true });

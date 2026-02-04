@@ -14,6 +14,6 @@ export class CreateUserDto {
     password: string;
 
     @IsNotEmpty()
-    @IsPhoneNumber('UA')
+    @IsPhoneNumber()
     phoneNumber: string;
 }

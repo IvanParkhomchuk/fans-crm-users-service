@@ -4,6 +4,7 @@ import { UsersRepository } from "./users.repository";
 import { CreateUserDto } from "./dto/create-user.dto";
 import bcrypt from 'bcryptjs';
 import {FindFilterDto} from "./dto/find-filter.dto";
+import {PaginatedUsersDto} from "./dto/filtered-users.dto";
 
 @Injectable()
 export class UsersService {
@@ -13,7 +14,7 @@ export class UsersService {
         return this.usersRepository.create(createUserDto);
     }
 
-    async findAll(findFilterDto: FindFilterDto) {
+    async findAll(findFilterDto: FindFilterDto): Promise<PaginatedUsersDto> {
         const page = findFilterDto.page ?? 1;
         const perPage = findFilterDto.perPage ?? 10;
         const { name, email, phone } = findFilterDto;
@@ -27,7 +28,7 @@ export class UsersService {
             filterQuery.email = { $regex: email, $options: 'i' };
         }
         if (phone) {
-            filterQuery.phone = { $regex: phone, $options: 'i' };
+            filterQuery.phoneNumber = { $regex: phone, $options: 'i' };
         }
 
         const skip = (page - 1) * perPage;
@@ -47,11 +48,11 @@ export class UsersService {
         };
     }
 
-    async findOne(_id: string) {
+    async findOne(_id: string): Promise<UserDocument> {
         return this.usersRepository.findOne({ _id });
     }
 
-    async verifyUser(email: string, password: string) {
+    async verifyUser(email: string, password: string): Promise<UserDocument> {
         const user = await this.usersRepository.findOne({ email });
         const passwordIsValid = await bcrypt.compare(password, user.password);
 

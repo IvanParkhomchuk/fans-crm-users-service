@@ -12,7 +12,7 @@ export class AuthController {
     @Post('login')
     async login(
         @CurrentUser() user: UserDocument,
-    ) {
+    ): Promise<{ accessToken: string }> {
         return this.authService.login(user);
     }
 }

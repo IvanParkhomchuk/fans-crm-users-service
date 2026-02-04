@@ -1,4 +1,4 @@
-import {Injectable, NotFoundException} from "@nestjs/common";
+import {ConflictException, Injectable, NotFoundException} from "@nestjs/common";
 import { UserDocument } from './models/user.schema';
 import { InjectModel } from "@nestjs/mongoose";
 import { QueryFilter, Model, Types } from 'mongoose';
@@ -19,7 +19,14 @@ export class UsersRepository {
             _id: new Types.ObjectId(),
         });
 
-        return (await user.save()).toJSON as unknown as UserDocument;
+        try {
+            return await user.save();
+        } catch (error) {
+            if (error.code === 11000) {
+                throw new ConflictException('User with this email already exists');
+            }
+            throw error;
+        }
     }
 
     async find(
