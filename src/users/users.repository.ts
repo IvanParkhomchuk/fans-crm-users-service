@@ -22,8 +22,23 @@ export class UsersRepository {
         return (await user.save()).toJSON as unknown as UserDocument;
     }
 
-    async find(filterQuery: QueryFilter<UserDocument>) {
-        return this.userModel.find(filterQuery).lean<UserDocument>(true);
+    async find(
+        filterQuery: QueryFilter<UserDocument>,
+        skip: number = 0,
+        limit: number = 10
+    ): Promise<UserDocument[]> {
+        console.log('REPOSITORY: filterQuery =', JSON.stringify(filterQuery));
+        console.log('REPOSITORY: skip =', skip, 'limit =', limit);
+
+        const result = await this.userModel
+            .find(filterQuery)
+            .skip(skip)
+            .limit(limit)
+            .lean<UserDocument[]>(true);
+
+        console.log('REPOSITORY: Returning', result.length, 'documents');
+
+        return result;
     }
 
     async findOne(filterQuery: QueryFilter<UserDocument>): Promise<UserDocument> {
@@ -34,5 +49,9 @@ export class UsersRepository {
         }
 
         return userDocument;
+    }
+
+    async count(filterQuery: QueryFilter<UserDocument>) {
+        return this.userModel.countDocuments(filterQuery);
     }
 }

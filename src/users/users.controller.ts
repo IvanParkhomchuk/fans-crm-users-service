@@ -2,6 +2,7 @@ import {Body, Controller, Get, Param, Post, Query, UseGuards} from '@nestjs/comm
 import { UsersService } from "./users.service";
 import { CreateUserDto } from "./dto/create-user.dto";
 import { JwtAuthGuard } from "../auth/guards/jwt-auth.guard";
+import {FindFilterDto} from "./dto/find-filter.dto";
 
 @Controller('users')
 export class UsersController {
@@ -17,8 +18,10 @@ export class UsersController {
 
     @Get()
     @UseGuards(JwtAuthGuard)
-    async findAll() {
-        return this.usersService.findAll();
+    async findAll(@Query() findFilterDto: FindFilterDto) {
+        console.log('CONTROLLER: Received query params:', findFilterDto);
+
+        return this.usersService.findAll(findFilterDto);
     }
 
     @Get(':id')
