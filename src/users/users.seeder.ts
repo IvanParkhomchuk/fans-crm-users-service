@@ -20,8 +20,6 @@ export class UsersSeeder implements Seeder {
 
         const hashedPassword = await bcrypt.hash('Password123!', 10);
 
-        console.log(`Starting seed: ${TOTAL} users in ${batches} batches...`);
-
         for (let i = 0; i < batches; i++) {
             const currentBatchSize = Math.min(BATCH_SIZE, TOTAL - i * BATCH_SIZE);
 
@@ -34,12 +32,9 @@ export class UsersSeeder implements Seeder {
 
             await this.userModel.insertMany(users, { ordered: false });
         }
-
-        console.log(`Seeded ${TOTAL} users successfully!`);
     }
 
     async drop(): Promise<any> {
-        console.log('Dropping all users...');
         return this.userModel.deleteMany({});
     }
 }

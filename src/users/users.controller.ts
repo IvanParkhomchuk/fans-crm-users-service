@@ -19,8 +19,6 @@ export class UsersController {
     @Get()
     @UseGuards(JwtAuthGuard)
     async findAll(@Query() findFilterDto: FindFilterDto) {
-        console.log('CONTROLLER: Received query params:', findFilterDto);
-
         return this.usersService.findAll(findFilterDto);
     }
 

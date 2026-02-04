@@ -27,16 +27,11 @@ export class UsersRepository {
         skip: number = 0,
         limit: number = 10
     ): Promise<UserDocument[]> {
-        console.log('REPOSITORY: filterQuery =', JSON.stringify(filterQuery));
-        console.log('REPOSITORY: skip =', skip, 'limit =', limit);
-
         const result = await this.userModel
             .find(filterQuery)
             .skip(skip)
             .limit(limit)
             .lean<UserDocument[]>(true);
-
-        console.log('REPOSITORY: Returning', result.length, 'documents');
 
         return result;
     }

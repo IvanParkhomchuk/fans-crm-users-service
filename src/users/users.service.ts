@@ -18,9 +18,6 @@ export class UsersService {
         const perPage = findFilterDto.perPage ?? 10;
         const { name, email, phone } = findFilterDto;
 
-        console.log('SERVICE: Received DTO:', findFilterDto);
-        console.log('SERVICE: page =', page, 'perPage =', perPage);
-
         const filterQuery: any = {};
 
         if (name) {
@@ -35,14 +32,10 @@ export class UsersService {
 
         const skip = (page - 1) * perPage;
 
-        console.log('SERVICE: Calling repository with skip =', skip, 'limit =', perPage);
-
         const [users, total] = await Promise.all([
             this.usersRepository.find(filterQuery, skip, perPage),
             this.usersRepository.count(filterQuery),
         ]);
-
-        console.log('SERVICE: Received users count:', users.length);
 
         return {
             data: users,
