@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, OnModuleInit, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { Seeder } from 'nestjs-seeder';
@@ -9,11 +9,24 @@ import {UserGenerator} from "./helpers/user-generator.helper";
 import {SEED_CONFIG} from "./constants/seed-config.constant";
 
 @Injectable()
-export class UsersSeeder implements Seeder {
+export class UsersSeeder implements Seeder, OnModuleInit {
+    private readonly logger = new Logger(UsersSeeder.name);
+
     constructor(
         @InjectModel(UserDocument.name)
         private readonly userModel: Model<UserDocument>,
     ) {}
+
+    async onModuleInit(): Promise<void> {
+        const userCount = await this.userModel.countDocuments();
+        if (userCount === 0) {
+            this.logger.log('Database is empty, running seeder...');
+            await this.seed();
+            this.logger.log('Seeding completed');
+        } else {
+            this.logger.log(`Database already has ${userCount} users, skipping seed`);
+        }
+    }
 
     async seed(): Promise<any> {
         await this.createDefaultAdmin();

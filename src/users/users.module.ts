@@ -1,4 +1,4 @@
-import {forwardRef, Module, OnModuleInit} from '@nestjs/common';
+import {forwardRef, Module} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { MongooseModule } from "@nestjs/mongoose";
@@ -14,7 +14,7 @@ import {UsersSeeder} from "./users.seeder";
     ]),
     forwardRef(() => AuthModule),
   ],
-  providers: [UsersService, UsersRepository],
+  providers: [UsersService, UsersRepository, UsersSeeder],
   controllers: [UsersController],
   exports: [UsersService, UsersRepository],
 })
